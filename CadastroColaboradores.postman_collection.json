@@ -1,0 +1,4397 @@
+{
+	"info": {
+		"_postman_id": "b2367770-68a3-46d7-8c52-7ec805a3377e",
+		"name": "Cadastro Colaboradores",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24058400"
+	},
+	"item": [
+		{
+			"name": "CadastroColaboradores - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"123456\",\r\n    \"dataDeNascimento\": \"31/04/2005 \",\r\n    \"cpf\": \"José da Silva\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Gerente - Sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", \r",
+							"    function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check Nome is True\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.variables.get(\"Nome\")).to.eq(JSON.parse(responseBody).nome)});\r",
+							"\r",
+							"    pm.test(\"Check DatadeNascimento is True\", \r",
+							"        function(){\r",
+							"    pm.expect(pm.variables.get(\"DatadeNascimento\")).to.eq(JSON.parse(responseBody).datadeNascimento)});\r",
+							"\r",
+							"        pm.test(\"Check CPF is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"CPF\")).to.eq(JSON.parse(responseBody).cpf)});\r",
+							"\r",
+							"      pm.test(\"Check Unidade is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"Unidade\")).to.eq(JSON.parse(responseBody).unidade)});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Supervisor- Sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function grupo(){\r",
+							"    var grupo = [\"Projetos\", \"Desenvolvimento\", \"Qualidade\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = grupo[Math.floor(Math.random()* grupo.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Grupo\",grupo());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", \r",
+							"    function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check Nome is True\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.variables.get(\"Nome\")).to.eq(JSON.parse(responseBody).nome)});\r",
+							"\r",
+							"    pm.test(\"Check DatadeNascimento is True\", \r",
+							"        function(){\r",
+							"    pm.expect(pm.variables.get(\"DatadeNascimento\")).to.eq(JSON.parse(responseBody).datadeNascimento)});\r",
+							"\r",
+							"        pm.test(\"Check CPF is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"CPF\")).to.eq(JSON.parse(responseBody).cpf)});\r",
+							"\r",
+							"      pm.test(\"Check Grupo is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"Grupo\")).to.eq(JSON.parse(responseBody).grupo)});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Supervisor\",  \r\n            \"grupo\": \"{{Grupo}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Analista- Sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function area(){\r",
+							"    var area = [\"Qualidade\", \"Desenvolvimento\", \"Marketing\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = area[Math.floor(Math.random()* area.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Area\",area());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", \r",
+							"    function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check Nome is True\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.variables.get(\"Nome\")).to.eq(JSON.parse(responseBody).nome)});\r",
+							"\r",
+							"    pm.test(\"Check DatadeNascimento is True\", \r",
+							"        function(){\r",
+							"    pm.expect(pm.variables.get(\"DatadeNascimento\")).to.eq(JSON.parse(responseBody).datadeNascimento)});\r",
+							"\r",
+							"        pm.test(\"Check CPF is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"CPF\")).to.eq(JSON.parse(responseBody).cpf)});\r",
+							"\r",
+							"      pm.test(\"Check Area is True\", \r",
+							"            function(){\r",
+							"    pm.expect(pm.variables.get(\"Area\")).to.eq(JSON.parse(responseBody).area)});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Analista\",  \r\n            \"area\": \"{{Area}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Nome Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.teaxt()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome -Maior que 40 caracteres",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Nome maior que 40 caracteres\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Gabriel de Oliveira e Silva dos Santos Lima\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",\r\n            \"unidade\": \"{{Unidade}}\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Ano Bissexto - Sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", \r",
+							"    function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"    pm.test(\"Check DatadeNascimento is True\", \r",
+							"        function(){\r",
+							"    pm.expect(pm.variables.get(\"DatadeNascimento\")).to.eq(JSON.parse(responseBody).datadeNascimento)});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"29/02/2004\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Ano Bissexto Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Data de Nascimento com ano Bissexto\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"29/02/2005\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Dia de Nascimento Superior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Ano de Nascimento cima do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"31/04/1990\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Dia de Nascimento Inferior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Data de Nascimento com ano abaixo do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"00/04/1990\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Mes de Nascimento Superior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Mes de Nascimento acima do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"10/13/2000\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Mes de Nascimento Inferior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Mes de Nascimento abaixo do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"10/00/2000\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Ano de Nascimento Superior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Ano de Nascimento acima do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"10/02/2010\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Ano de Nascimento Inferior - Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Ano de Nascimento abaixo do limite\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"10/08/1899\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Maior que 11 caracteres Inválido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com CPF maior que 11 caracteres\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"123456789100\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Caracteres especiais",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com CPF caracteres especiais\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"@ll&xandr!!\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Caracteres alfabéticos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com CPF caracteres alfabéticos\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"Allexandree\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Caracteres Numéricos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Nome com Caracteres Numéricos\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"12345678910\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Caracteres Especiais",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Nome com Caracteres Especiais\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"@ll&xandr!!\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Caracteres com Zero",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Nome com zeros\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"000000000000\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Data de Nascimento- Caracteres com Zero",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Data de Nascimento com zeros\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"00/00/0000\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Caracteres com Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador CPF com Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"Null\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Caracteres com Zero",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador CPF com Zeros\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"00000000000\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Caracteres Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Nome com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Null\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Gerente- Preenchido Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Cargo com Gerente Preenchido Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Null\",  \r\n            \"unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Supervisor- Preenchido Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"function grupo(){\r",
+							"    var grupo = [\"Projetos\", \"Desenvolvimento\", \"Qualidade\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = grupo[Math.floor(Math.random()* grupo.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Grupo\",grupo());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Supervisor com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Null\",  \r\n            \"grupo\": \"{{Grupo}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Analista- Preenchido Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function area(){\r",
+							"    var area = [\"Qualidade\", \"Desenvolvimento\", \"Marketing\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = area[Math.floor(Math.random()* area.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Area\",area());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Analista com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Null\",  \r\n            \"area\": \"{{Area}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Unidade- Caracteres Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Unidade com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"subCargo\": \"Gerente\",  \r\n            \"grupo\": \"Null\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Grupo- Caracteres Null",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Grupo com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Supervisor\",  \r\n            \"Grupo\": \"Null\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Area- Caracteres Null Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador Area com Caracteres Null\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Analista\",  \r\n            \"Grupo\": \"Null\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Data de nascimento- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Data de Nascimento Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Grupo\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com CPF Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Grupo\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Cargo- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Cargo Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"CPF\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"\",  \r\n            \"Grupo\": \"\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Unidade- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Unidade Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"CPF\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Grupo\": \"\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Grupo- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Grupo Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"CPF\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Supervisor\",  \r\n            \"Grupo\": \"\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Area- Vazio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Area Vazio\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"CPF\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Analista\",  \r\n            \"Grupo\": \"\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - Nome - Caracter Único",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"function generateCPF() {\r",
+							"  var cpf = \"\";\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    cpf += Math.floor(Math.random() * 10);\r",
+							"  }\r",
+							"  var sum = 0;\r",
+							"  for (var i = 0; i < 9; i++) {\r",
+							"    sum += cpf.charAt(i) * (10 - i);\r",
+							"  }\r",
+							"  var remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  sum = 0;\r",
+							"  for (var i = 0; i < 10; i++) {\r",
+							"    sum += cpf.charAt(i) * (11 - i);\r",
+							"  }\r",
+							"  remainder = sum % 11;\r",
+							"  if (remainder < 2) {\r",
+							"    cpf += \"0\";\r",
+							"  } else {\r",
+							"    cpf += (11 - remainder);\r",
+							"  }\r",
+							"  return cpf;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador com Nome Caracter Único\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"a\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"{{CPF}}\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Grupo\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CadastroColaboradores - CPF - Caracter único",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function firstName(){\r",
+							"    var firstName = [\"Miguel\",\"Sophia\",\"Davi\",\"Alice\", \"Arthur\",\"Julia\",\"Pedro\",\"Isabely\",\"Gabriel\",\"Manuela\",\"Laura\",\"Lucas\",\"Flavia\",\"Luiza\",\"Matues\",\"Noah\",\"Valentina\",\"Rafael\",\"Giovana\",\"Heitor\",\"Enzo\",\"Helena\",\"Guilherme\",\"Beatriz\",\"Nicolas\",\"Leticia\",\"Lorenzo\",\"Lara\",\"Gustavo\",\"Mariana\",\"Felipe\",\"Nicole\",\"Samuel\",\"Joice\",\"Dener\",\"Rafaela\",\"Augusto\",\"Heloisa\",\"Daniel\",\"Isadora\",\"Vitor\",\"Livia\",\"Leonardo\",\"Henrique\",\"Juliana\",\"Theo\",\"Lorena\",\"Murilo\",\"Gabriela\",\"Eduardo\",\"Yasmim\",\"Pedro\",\"Henriqueta\",\"Isabelly\",\"Pietro\",\"Sarah\",\"Kaua\",\"Jaqueline\",\"Isaac\",\"Leticia\",\"Caio\"\r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = firstName[Math.floor(Math.random()* firstName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"FirstName\",firstName());\r",
+							"\r",
+							"function lastName(){\r",
+							"    var lastName = [\"da silva\",\"dos santos\",\"Pereira\",\"Alves de queiroz\",\"Ferreira\",\"de Oliveira\",\"Silva\",\"Rodigues\",\"de Souza\",\"Gomes\",\"Santos\",\"Oliveira\",\"Ribeiro\",\"Martins\",\"Gonçalvez\",\"Soares\",\"Barbosa\",\"Lospes\",\"Vieira\",\"Souza\",\"Fernandes\",\"Lima\",\"Costa\",\"Batista\",\"Dias\",\"Moreira\",\"de lima\",\"das neves\", \"da costa\",\"de almeida\",\"mendes\",\"carvalho\",\"Araujo\"\r",
+							"    ];\r",
+							"    var randomItem = lastName[Math.floor(Math.random() * lastName.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"LastName\",lastName());\r",
+							"\r",
+							"pm.environment.set(\"Nome\", pm.variables.get(\"FirstName\")+\" \" + pm.variables.get(\"LastName\"));\r",
+							"\r",
+							"function gerarDataAleatoria() {\r",
+							"  var dia = Math.floor(Math.random() * 30) + 1;\r",
+							"  var mes = Math.floor(Math.random() * 12) + 1;\r",
+							"  var ano = Math.floor(Math.random() * 105) + 1900;\r",
+							"  return dia + \"/\" + mes + \"/\" + ano;\r",
+							"}\r",
+							"\r",
+							"var dataAleatoria = gerarDataAleatoria();\r",
+							"\r",
+							"pm.environment.set(\"DatadeNascimento\", pm.variables.get(\"dataDeNascimento\", dataAleatoria));\r",
+							"\r",
+							"pm.environment.set(\"CPF\", generateCPF());\r",
+							"\r",
+							"\r",
+							"function unidade(){\r",
+							"    var unidade = [\"Maringá\", \"São Paulo\"  \r",
+							"    ];\r",
+							"\r",
+							"    var randomItem = unidade[Math.floor(Math.random()* unidade.length)];\r",
+							"    return randomItem;\r",
+							"}\r",
+							"pm.environment.set(\"Unidade\",unidade());\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cadastro inválido de Colaborador  CPF com Caracter único\", \r",
+							"    function(){\r",
+							"    pm.expect(pm.response.text()).contains(\"Mensagem de erro a definir.\")});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{Nome}}\",\r\n    \"dataDeNascimento\": \"{{DataDeNascimento}}\",\r\n    \"cpf\": \"1\",\r\n    \"cargo\": [\r\n        {\r\n            \"SubCargo\": \"Gerente\",  \r\n            \"Unidade\": \"{{Unidade}}\"\r\n        } \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{UrlTeste}}/CadastroColaboradores ",
+					"host": [
+						"{{UrlTeste}}"
+					],
+					"path": [
+						"CadastroColaboradores "
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
